@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="chatbox">
+        <h2>Customer Support Chatbot</h2>
+        <div id="chatlog"></div>
+        <input id="userInput" type="text" placeholder="Type your message..." autofocus>
+    </div>
+
+    <script>
+        const input = document.getElementById('userInput');
+        const chatlog = document.getElementById('chatlog');
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const msg = input.value;
+                chatlog.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
+                fetch(`/get?msg=${msg}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        chatlog.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
+                        input.value = '';
+                        chatlog.scrollTop = chatlog.scrollHeight;
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
